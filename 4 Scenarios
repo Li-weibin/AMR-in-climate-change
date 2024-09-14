@@ -1,0 +1,29 @@
+PredictValue <- AMR2050[c("ResistanceMap", "WorldBank", "year", "Region", "IncomeGroup_baseline")]
+colnames(PredictValue)[5] <- "IncomeGroup"
+for(org in c("R_geomean", "3GCREC", "3GCRKP", "CREC", "CRKP", "CRAB", "CRPA")){
+  model <- get(paste0("model_", org))
+  org <- ifelse(org == "R_geomean", "R", org)
+  for(ssp in c("ssp126", "ssp245", "ssp370", "ssp585")){
+    for(i in c("norm", "gov")){
+      for(ii in c("norm", "gov")){
+        data <- merge(CMIP_ssp_2023[CMIP_ssp_2023$ssp == ssp,], 
+                      pop_ssp_2023[pop_ssp_2023$ssp == ssp,], all = T)
+        data <- merge(merge(data, SDGs[[i]], all = T), AMS[[ii]], all = T)
+        # Missing data of CRPA
+        if(org == "CRPA"){
+          data <- data[data$IncomeGroup != "L" & data$Region != "Middle East and North Africa", ]
+        }
+        a <- AMR_CRUTS$ResistanceMap[-as.numeric(names(predict(model)))]
+        b <- AMR_CRUTS$ResistanceMap[as.numeric(names(predict(model)))]
+        extraCountry <- unique(a[!(a %in% b)])
+        pairedCountry <- unique(AMR_CRUTS$ResistanceMap[!(AMR_CRUTS$ResistanceMap %in% extraCountry)])
+        data <- data[data$ResistanceMap %in% pairedCountry,]
+        data$GM_PM25 <- NULL
+        colnames(data) <- gsub("_orgin", "", colnames(data))
+        data[paste0(org, "_", ssp, "_", i, "SDGs_", ii, "AMC")] <- exlogit(predict(model, data, type = "response"))
+        PredictValue <- merge(PredictValue, data[c("WorldBank", "year", paste0(org, "_", ssp, "_", i, "SDGs_", ii, "AMC"))], all = T)
+        message(paste0(org, "_", ssp, "_", i, "SDGs_", ii, "AMC"))
+      }
+    }
+  }
+}
