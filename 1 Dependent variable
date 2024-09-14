@@ -1,0 +1,32 @@
+# Geometric mean
+mean_geo <- function(vector, na.rm = T, adjust = T){
+  if(sum(!is.na(vector)) == 0){
+    return(NA)
+  }else if(max(vector, na.rm = T) == 0){
+    return(0)
+  }else if(adjust){
+    vector[which(vector == 0)] <- min(vector[vector != 0], na.rm = T)
+  }
+  return(ifelse(sum(!is.na(vector)) == 0, NA, prod(vector, na.rm = na.rm)^(1/sum(!is.na(vector)))))
+} 
+# Min-max normalization
+Min_max <- function(data){
+  a <- c()
+  for(i in colnames(data)){
+    b <- (data[,i] - min(data[,i], na.rm = T))/(max(data[,i], na.rm = T) - min(data[,i], na.rm = T))
+    a <- cbind(a, b)
+  }
+  return(rowMeans(a, na.rm = T))
+}
+# Caculation
+for(i in colnames(AMR)[3:8]){
+  AMR[,paste0(i, "_minmax")] <- Min_max(AMR[i])
+  AMR[,paste0(i, "_geomean")] <- AMR[i]
+  AMR[AMR[,paste0(i, "_geomean")] %in% 0, paste0(i, "_geomean")] <- min(AMR[AMR[i]>0, i], na.rm = T)
+} 
+for(i in colnames(AMR)[3:8]) AMR[,paste0(i, "_logit")] <- car::logit(AMR[i], adjust = min(AMR[AMR[i]>0, i], na.rm = T))
+AMR$R_minmax <- rowMeans(AMR[paste0(c("3GCREC", "3GCRKP", "CRAB", "CREC", "CRKP", "CRPA"), "_minmax")], na.rm = T)
+AMR$R_geomean <- sapply(1:nrow(AMR), function(i) mean_geo(as.numeric(AMR[i, paste0(c("3GCREC", "3GCRKP", "CRAB", "CREC", "CRKP", "CRPA"), "_geomean")])))
+# Logit transformation
+AMR$R_minmax_logit <- car::logit(AMR$R_minmax, adjust = min(AMR[AMR$R_minmax>0, "R_minmax"]))
+AMR$R_geomean_logit <- car::logit(AMR$R_geomean)
