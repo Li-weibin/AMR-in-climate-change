@@ -1,0 +1,13 @@
+library(lme4)
+library(lmerTest)
+library(afex)
+library(car)
+library(performance)
+form <- formula(
+  R_geomean_logit ~ GM_PM25 + sro_year + ssro_year + TempChange + 
+  Urban + CPI + CHERate + OutPocketRate + lnPopDensity + lnTravel + 
+  WASHIndex + ImmIndex + AMC + IncomeGroup + (1|year) + (1|ResistanceMap)
+)
+model <- lmer(form,
+              data = AMR_CRUTS,
+              control = lmerControl(optimizer="bobyqa"))
