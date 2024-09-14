@@ -1,0 +1,95 @@
+## Observational data (raster data -> country level data)
+# Runoff data 
+library(ncdf4)
+library(sf)
+library(raster)
+# dim(1440, 721, 24), nc_data(sro, ssro), nc_data2(msror, mssror)
+nc_data <- nc_open("Original data/Ncdf4/ERA5/annual_mean_1999-2022.nc")
+nc_data2 <- nc_open("Original data/Ncdf4/ERA5/annual_mean_1999-2022_runoff_rate.nc")
+lon <- ncvar_get(nc_data, "longitude") # seq(0, 359.75, 0.25)
+lon[lon > 180] <- lon[lon > 180] - 360
+lat <- ncvar_get(nc_data, "latitude") # seq(90, -90, -0.25)
+ERA5 <- expand.grid(ABENAME = worldmap$ABENAME, year = 1999:2022)
+ERA5[c("sro", "ssro", "msror", "mssror")] <- NA
+for(i in c("sro", "ssro", "msror", "mssror")){
+  for(year in 1:24){
+    if(i %in% c("sro", "ssro")){
+      var <- ncvar_get(nc_data, i)[,,year]
+    }else{
+      var <- ncvar_get(nc_data2, i)[,,year]
+    }
+    var_adjusted <- abind::abind(var[(length(lon)/2 + 1):length(lon),], var[1:(length(lon)/2),], along = 1)
+    grid_data <- raster(t(var_adjusted), xmn=-180.125, xmx=180-0.125, ymn=-90.125, ymx=90.125)
+    projection(grid_data) <- crs(worldmap)
+    ERA5[ERA5$year == year + 1998, i] <- extract(grid_data, worldmap, fun = mean, na.rm = TRUE)
+    message(paste(i,year))
+  }
+}
+
+## Predicted data (raster data -> country level data)
+library(ncdf4)
+library(sf)
+library(raster)
+library(ggplot2)
+# Baseline temperature (1951~1980)
+nc_data <- nc_open("Original data/Ncdf4/mean_tas_Amon_FGOALS-f3-L_historical_r1i1p1f1_gr_195101-198012.nc")
+lon <- ncvar_get(nc_data, "lon") # seq(0.625, 360, 1.25)
+lon[lon > 180] <- lon[lon > 180] - 360
+lat <- ncvar_get(nc_data, "lat") # seq(-89.5, 90, 1)
+var <- ncvar_get(nc_data, "tas") 
+var <- var[,ncol(var):1]
+var_adjusted <- abind::abind(var[(length(lon)/2 + 1):length(lon),], var[1:(length(lon)/2),], along = 1)
+grid_data <- raster(t(var_adjusted), xmn=-180, xmx=180, ymn=-90, ymx=90)
+projection(grid_data) <- crs(worldmap)
+TempBase5180 <- data.frame(ABENAME = worldmap$ABENAME,
+                           TempBase = extract(grid_data, worldmap, fun = mean, na.rm = TRUE))
+TempBase5180$TempBase <- TempBase5180$TempBase - 273.15
+# Runoff & temperature
+CMIP6 <- expand.grid(ABENAME = worldmap$ABENAME, ssp = c("ssp126", "ssp245", "ssp370", "ssp585"), year = 2015:2050)
+CMIP6[c("mrrob", "mrros", "tas")] <- NA
+for(i in dir("Original data/Ncdf4/CMIP6")[-5:-8]){ # 空气污染数据为四维数据单独提取
+  ssp <- sub("^([^_]*_){4}([^_]*)_.*$", "\\2", i)
+  nc_data <- nc_open(paste0("Original data/Ncdf4/CMIP6/", i))
+  i <- sub("^.*?_(.*?)_.*$", "\\1", i)
+  lon <- ncvar_get(nc_data, "lon")
+  lon[lon > 180] <- lon[lon > 180] - 360
+  lat <- ncvar_get(nc_data, "lat")
+  for(year in 1:36){
+    var <- ncvar_get(nc_data, i)[,,year] # 需要翻转列，再调整行
+    var <- var[,ncol(var):1]
+    var_adjusted <- abind::abind(var[(length(lon)/2 + 1):length(lon),], var[1:(length(lon)/2),], along = 1)
+    grid_data <- raster(t(var_adjusted), xmn=-180, xmx=180, ymn=-90, ymx=90)
+    projection(grid_data) <- crs(worldmap)
+    CMIP6[CMIP6$year == year + 2014 & CMIP6$ssp == ssp, i] <- extract(grid_data, worldmap, fun = mean, na.rm = TRUE)
+    message(paste(i, ssp, year))
+  }
+}
+# PM2.5
+CMIP6_PM25 <- expand.grid(ABENAME = worldmap$ABENAME, ssp = c("ssp126", "ssp245", "ssp370", "ssp585"), year = 2015:2050)
+CMIP6_PM25["mmrpm2p5_orgin"] <- NA
+for(i in dir("Original data/Ncdf4/CMIP6")[5:8]){
+  ssp <- sub("^([^_]*_){4}([^_]*)_.*$", "\\2", i)
+  nc_data <- nc_open(paste0("Original data/Ncdf4/CMIP6/", i))
+  i <- sub("^.*?_(.*?)_.*$", "\\1", i)
+  lon <- ncvar_get(nc_data, "lon")
+  lon[lon > 180] <- lon[lon > 180] - 360
+  lat <- ncvar_get(nc_data, "lat")
+  for(year in c(1:36)){
+    var <- ncvar_get(nc_data, i)[,,1,year] # 需要翻转列，再调整行
+    var <- var[,ncol(var):1]
+    var_adjusted <- abind::abind(var[(length(lon)/2 + 1):length(lon),], var[1:(length(lon)/2),], along = 1)
+    grid_data <- raster(t(var_adjusted), xmn=-180, xmx=180, ymn=-90, ymx=90)
+    projection(grid_data) <- crs(worldmap)
+    CMIP6_PM25[CMIP6_PM25$year == year + 2014 & CMIP6$ssp == ssp, paste0(i, "_orgin")] <- extract(grid_data, worldmap, fun = mean, na.rm = TRUE)
+    message(paste(i, ssp, year))
+  }
+}
+# Caculation
+CMIP_ssp <- merge(CMIP6, CMIP6_PM25, all = T)
+CMIP_ssp <- merge(CMIP_ssp, TempBase5180, all = T)
+CMIP_ssp$tmn <- CMIP_ssp$tas - 273.15 # 摄氏度
+CMIP_ssp$TempChange <- CMIP_ssp$tmn - CMIP_ssp$TempBase # 摄氏度
+CMIP_ssp$GM_PM25 <- CMIP_ssp$mmrpm2p5 # μg m-3
+CMIP_ssp$GM_PM25_orgin <- CMIP_ssp$mmrpm2p5_orgin *1.293 *10^9 # μg m-3
+CMIP_ssp$sro_year <- CMIP_ssp$mrros * 86400 * sapply(CMIP_ssp$year, calculateDaysInYear) * 10/1000 # 100m year-1
+CMIP_ssp$ssro_year <- CMIP_ssp$mrrob * 86400 * sapply(CMIP_ssp$year, calculateDaysInYear) * 10/1000 # 100m year-1
