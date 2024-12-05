@@ -5,7 +5,7 @@
 ## **1. System Requirements**
 
 ### **Software Dependencies:**
-- **R (version 1 or higher)** – The software is developed and tested using the R programming language.
+- **R (version 4.4.1 or higher)** – The software is developed and tested using the R programming language.
 - **Required R Packages**:
   - `plyr` (Tools for Splitting, Applying and Combining Data)
   - `reshape2` (Flexibly Reshape Data: A Reboot of the Reshape Package)
