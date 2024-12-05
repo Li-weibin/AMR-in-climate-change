@@ -36,20 +36,7 @@
 1. **Install R**:  
    Download and install R from the official R website: [https://cran.r-project.org/](https://cran.r-project.org/).
    
-2. **Install Required R Packages**:  
-   Open R or RStudio and install the required packages by running the following command:
-   ```r
-   install.packages(c("plyr", "reshape2", "spdep", "ggplot2", "sf", "pactchwork"))
-   ```
-   For INLA package:
-   ```r
-   if (!requireNamespace("BiocManager", quietly = TRUE))
-   install.packages("BiocManager")
-   BiocManager::install("Rgraphviz")
-   install.packages("INLA", repos=c(getOption("repos"), INLA="https://inla.r-inla-download.org/R/stable"), dep=TRUE)
-   ```
-
-3. **Download RStudio**:  
+2. **Download RStudio**:  
    RStudio is a popular integrated development environment (IDE) for R, making it easier to write and debug R scripts. Below are the steps to install RStudio:
   
    Download RStudio:
@@ -65,6 +52,19 @@
    ```
    Verify Installation:
    Open RStudio and ensure it detects the installed R version automatically. If not, ensure the R binary path is correctly set in RStudio preferences.
+
+3. **Install Required R Packages**:  
+   Open R or RStudio and install the required packages by running the following command:
+   ```r
+   install.packages(c("plyr", "reshape2", "spdep", "ggplot2", "sf", "pactchwork"))
+   ```
+   For INLA package:
+   ```r
+   if (!requireNamespace("BiocManager", quietly = TRUE))
+   install.packages("BiocManager")
+   BiocManager::install("Rgraphviz")
+   install.packages("INLA", repos=c(getOption("repos"), INLA="https://inla.r-inla-download.org/R/stable"), dep=TRUE)
+   ```
 
 ### **Typical Install Time**:
 On a normal desktop computer: The process typically takes 5–10 minutes, depending on internet speed and system performance.
