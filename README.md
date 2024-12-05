@@ -50,29 +50,25 @@
    ```
 
 3. **Download RStudio**:  
-RStudio is a popular integrated development environment (IDE) for R, making it easier to write and debug R scripts. Below are the steps to install RStudio:
-
-Download RStudio:
-Visit the official RStudio website at https://posit.co/download/rstudio-desktop/. Select the version suitable for your operating system (Windows, macOS, or Linux).
-
-Install RStudio:
-
-Windows: Run the downloaded .exe file and follow the installation wizard. Default settings are typically sufficient.
-macOS: Open the downloaded .dmg file, drag the RStudio icon into the Applications folder, and follow any additional prompts.
-Linux: Install the .deb or .rpm package depending on your distribution using the package manager, e.g., for Ubuntu:
-bash
-复制代码
-sudo apt install ./rstudio-<version>.deb
-Verify Installation:
-Open RStudio and ensure it detects the installed R version automatically. If not, ensure the R binary path is correctly set in RStudio preferences.
-
-Typical Installation Time:
-
-On a normal desktop computer: The process typically takes 5–10 minutes, depending on internet speed and system performance.
-By completing this step, you will have a fully functional R and RStudio environment for running the provided code.
+   RStudio is a popular integrated development environment (IDE) for R, making it easier to write and debug R scripts. Below are the steps to install RStudio:
+  
+   Download RStudio:
+   Visit the official RStudio website at https://posit.co/download/rstudio-desktop/. Select the version suitable for your operating system (Windows, macOS, or Linux).
+  
+   Install RStudio:
+  
+   Windows: Run the downloaded .exe file and follow the installation wizard. Default settings are typically sufficient.
+   macOS: Open the downloaded .dmg file, drag the RStudio icon into the Applications folder, and follow any additional prompts.
+   Linux: Install the .deb or .rpm package depending on your distribution using the package manager, e.g., for Ubuntu:
+   ```bash
+   sudo apt install ./rstudio-<version>.deb
+   ```
+   Verify Installation:
+   Open RStudio and ensure it detects the installed R version automatically. If not, ensure the R binary path is correctly set in RStudio preferences.
 
 ### **Typical Install Time**:
-On a typical desktop computer, installation should take around **5-10 minutes** depending on internet speed and system specifications.
+On a normal desktop computer: The process typically takes 5–10 minutes, depending on internet speed and system performance.
+By completing this step, you will have a fully functional R and RStudio environment for running the provided code.
 
 ---
 
