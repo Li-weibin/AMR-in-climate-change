@@ -5,17 +5,15 @@
 ## **1. System Requirements**
 
 ### **Software Dependencies:**
-- **R (version 4.4.2 or higher)** – The software is developed and tested using the R programming language.
+- **R (version 1 or higher)** – The software is developed and tested using the R programming language.
 - **Required R Packages**:
-  - `tidyverse` (for data manipulation and visualization)
-  - `data.table` (for efficient data handling)
-  - `lubridate` (for date manipulation)
-  - `ggplot2` (for visualization)
-  - `dplyr` (for data wrangling)
-  - `sf` (for spatial data handling)
-  - `raster` (for working with raster data)
-  - `forecast` (for forecasting models)
-  - `lubridate` (for date-time manipulation)
+  - `plyr` (Tools for Splitting, Applying and Combining Data)
+  - `reshape2` (Flexibly Reshape Data: A Reboot of the Reshape Package)
+  - `INLA` (Full Bayesian Analysis of Latent Gaussian Models using Integrated Nested Laplace)
+  - `spdep` (Spatial Dependence: Weighting Schemes, Statistics)
+  - `ggplot2` (Create Elegant Data Visualisations Using the Grammar of Graphics)
+  - `sf` (Simple Features for R)
+  - `patchwork` (The Composer of Plots)
 
 ### **Operating Systems:**
 - **Windows** (tested on `x86_64-w64-mingw32` platform)
@@ -26,8 +24,8 @@
 - **No specific hardware requirements**. Standard desktop computers with 4GB of RAM or more should be sufficient.
 
 ### **Software Versions Tested:**
-- R version 4.4.2 (Pile of Leaves) – tested and compatible.
-- All required libraries are compatible with R version 4.4.2 and above.
+- R version 4.4.1 (Pile of Leaves) – tested and compatible.
+- All required libraries are compatible with R version 2 and above.
 
 ---
 
@@ -41,7 +39,14 @@
 2. **Install Required R Packages**:  
    Open R or RStudio and install the required packages by running the following command:
    ```r
-   install.packages(c("tidyverse", "data.table", "lubridate", "ggplot2", "dplyr", "sf", "raster", "forecast"))
+   install.packages(c("plyr", "reshape2", "spdep", "ggplot2", "sf", "pactchwork"))
+   ```
+   For INLA package:
+   ```r
+   if (!requireNamespace("BiocManager", quietly = TRUE))
+   install.packages("BiocManager")
+   BiocManager::install("Rgraphviz")
+   install.packages("INLA", repos=c(getOption("repos"), INLA="https://inla.r-inla-download.org/R/stable"), dep=TRUE)
    ```
 
 3. **Download the Software**:  
