@@ -232,15 +232,6 @@ To run the demo on the provided data, follow these steps:
       )
     
     # patchwork
-    layout <- "
-    AAAA
-    AAAA
-    AAAA
-    AAAA
-    AAAA
-    BBBB
-    BBBB
-    "
     ggsave("AMR_year.png", height = 12, width = 9, dpi = 500,
            plot = agg_plot / AMR_plot + 
              plot_annotation(tag_levels = 'A') & 
