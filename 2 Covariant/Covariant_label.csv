@@ -1,0 +1,39 @@
+﻿variable,label
+TempChange,Temperature change on land (℃)
+GM_PM25,Geographic-mean PM2.5 (μg·m-3)
+sro_year,Annual surface runoff total (100mm)
+ssro_year,Annual sub-surface runoff total (100mm)
+Urban,Urban population (% of total population)
+CHERate,Health expenditures (% of GDP)
+OutPocketRate,Out-of-pocket expenditures (% of health expenditures)
+CPI,Corruption Perceptions Index
+lnPopDensity,Population per square kilometer (Log-scale)
+lnTravel,International inbound tourists (Log-scale)
+WASHIndex,WASH Coverage (% total population)
+ImmIndex,Immunisation coverage (% eligible population)
+AMC,"Antimicrobial consumption (DDD/1,000/day)"
+J01A,"J01A Tetracyclines (DDD/1,000/day)"
+J01B,"J01B Amphenicols (DDD/1,000/day)"
+J01C,"J01C Penicillins (DDD/1,000/day)"
+J01D,"J01D Other beta-lactams (DDD/1,000/day)"
+J01E,"J01E Sulfonamides and trimethoprim (DDD/1,000/day)"
+J01F,"J01F Macrolides, lincosamides & streptogramins (DDD/1,000/day)"
+J01G,"J01G Aminoglycosides (DDD/1,000/day)"
+J01M,"J01M Quinolones (DDD/1,000/day)"
+SE.PRM.NENR,Primary school enrollment (% school-age population)
+SE.SEC.NENR,Secondary school enrollment (% school-age population)
+AnimalmgKg,Total animal antimicrobial consumption (mg·kg-1)
+AnimalmgKg_adj,Ajdusted animal antimicrobial consumption (mg·kg-1)
+Aminoglycosides,Aminoglycosides (mg·kg-1)
+Amphenicols,Amphenicols (mg·kg-1)
+Cephalosporins,Cephalosporins (all generations) (mg·kg-1)
+Lincosamides,Lincosamides (mg·kg-1)
+Macrolides,Macrolides (mg·kg-1)
+Fluoroquinolones,Fluoroquinolones (mg·kg-1)
+Other quinolones,Other quinolones (mg·kg-1)
+Penicillins,Penicillins (mg·kg-1)
+Pleuromutilins,Pleuromutilins (mg·kg-1)
+Polypeptides,Polypeptides (mg·kg-1)
+Sulfonamides,Sulfonamides (including trimethoprim) (mg·kg-1)
+Tetracyclines,Tetracyclines (mg·kg-1)
+Others,Others (mg·kg-1)
